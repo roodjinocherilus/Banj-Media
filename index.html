@@ -184,7 +184,7 @@
     bottom: 0; left: 0; right: 0;
     height: var(--cmd-h);
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     z-index: 900;
     background: var(--black);
     border-top: 1px solid rgba(255,255,255,.06);
@@ -194,7 +194,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 28px;
+    padding: 0 22px;
     border-right: 1px solid rgba(255,255,255,.06);
     cursor: pointer;
     position: relative;
@@ -231,7 +231,7 @@
 
   .cmd-name {
     font-family: 'Big Shoulders Display', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .04em;
@@ -244,7 +244,7 @@
   .cmd-pillar:hover .cmd-name { color: #f0f0f0; }
 
   .cmd-num {
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 500;
     letter-spacing: .1em;
     color: rgba(240,240,240,.22);
@@ -499,7 +499,53 @@
     z-index: 2;
   }
 
+  .hero-photo {
+    position: absolute;
+    right: clamp(24px, 5vw, 88px);
+    top: 50%;
+    width: clamp(280px, min(29vw, 43vh), 460px);
+    aspect-ratio: 4 / 5.8;
+    transform: translateY(-45%);
+    z-index: 2;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.04);
+    box-shadow: 0 42px 120px rgba(0,0,0,.45);
+  }
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 42%;
+    transform: scale(1.08);
+    transform-origin: 50% 30%;
+    filter: saturate(1.02) contrast(1.04) brightness(.82);
+  }
+  .hero-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(10,10,13,.1), rgba(10,10,13,.28)),
+      linear-gradient(90deg, rgba(10,10,13,.12), transparent 48%, rgba(217,43,43,.12));
+    pointer-events: none;
+  }
+  .hero-photo-mobile { display: none; }
+
   .hero-content { position:relative; z-index:3; max-width: 62%; }
+
+  @media(max-width:1180px) and (min-width:901px){
+    .hero-photo{
+      width:clamp(250px, min(26vw, 40vh), 340px);
+      right:32px;
+    }
+    .hero-photo img{
+      object-position:50% 40%;
+      transform:scale(1.14);
+      transform-origin:50% 28%;
+    }
+    .hero-content{max-width:64%;}
+  }
 
   .hero-eyebrow {
     font-size:10px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
@@ -1108,6 +1154,12 @@
   @media(max-width:900px){
     .tb-burger{display:flex;}
     #topbar{padding:0 24px;}
+    #hero{
+      min-height:auto;
+      justify-content:flex-start;
+      padding-top:110px;
+      padding-bottom:120px;
+    }
     section,#hero,#apply,footer{padding-left:24px;padding-right:24px;}
     .prizzz-inner{padding:90px 24px;}
     hr.rule{margin:0 24px;}
@@ -1119,11 +1171,33 @@
     #cmd{display:none;}
     #cmd-mobile{display:flex;}
     .hero-content{max-width:100%;}
+    .hero-ghost{display:none;}
+    .hero-photo{display:none;}
+    .hero-photo-mobile{
+      display:block;
+      width:100%;
+      aspect-ratio: 4 / 4.6;
+      max-height: min(56vh, 460px);
+      margin:28px 0 28px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
+    }
+    .hero-photo-mobile img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:50% 40%;
+      transform:scale(1.06);
+      transform-origin:50% 30%;
+      filter:saturate(1.02) contrast(1.04) brightness(.8);
+    }
     #fullmenu{padding:80px 32px;}
   }
   @media(max-width:600px){
     .hero-h{font-size:38px;line-height:.98;}
     .hero-sub{font-size:14px;line-height:1.7;}
+    .hero-photo-mobile{aspect-ratio: 1 / 1.02;max-height:none;}
     .hero-cred{display:grid;grid-template-columns:1fr 1fr;gap:24px 20px;}
     .h-cred-num{font-size:38px;}
     .pillars-grid,.micro-grid,.eco-num-row,.who-grid,.insights-grid,.proof-panel.active,.svc-panel.active{grid-template-columns:1fr;}
@@ -1179,15 +1253,20 @@
   <div class="hero-corner-glow"></div>
   <div class="hero-grain"></div>
   <div class="hero-ghost">BANJ</div>
+  <figure class="hero-photo" aria-label="Banj Media live production audience">
+    <img src="assets/hero/audience-camera.jpg" alt="Camera filming a Banj Media audience event" />
+  </figure>
   <div class="hero-content">
     <h1 class="hero-h">
       Banj Media builds<br />
       creative systems for<br />
       brands, institutions,<br />
-      and<br />
-      national-scale<br />
+      and national-scale<br />
       projects.
     </h1>
+    <figure class="hero-photo-mobile" aria-label="Banj Media live production audience">
+      <img src="assets/hero/audience-camera.jpg" alt="Camera filming a Banj Media audience event" />
+    </figure>
     <p class="hero-sub">
       Part media platform, part strategic agency, part production studio, part execution engine,
       designed for environments where visibility must lead to outcomes.
@@ -1659,8 +1738,13 @@
     <div class="cmd-pulse"></div>
   </a>
   <a href="#services" class="cmd-pillar" data-pillar="agency">
-    <div class="cmd-name">Agency</div>
-    <div class="cmd-num">Branding · Content · Web</div>
+    <div class="cmd-name">Strategic Agency</div>
+    <div class="cmd-num">Narrative · Campaign · Positioning</div>
+    <div class="cmd-pulse"></div>
+  </a>
+  <a href="#services" class="cmd-pillar" data-pillar="studio">
+    <div class="cmd-name">Production Studio</div>
+    <div class="cmd-num">Video · Photo · Design · Motion</div>
     <div class="cmd-pulse"></div>
   </a>
   <a href="#proof" class="cmd-pillar" data-pillar="execution">
@@ -1819,15 +1903,16 @@ document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
 /* ── MOBILE CMD ── */
 const mobPillars=[
   {label:'Media Platform',num:'700K+ audience',href:'#ecosystem'},
-  {label:'Agency',num:'Branding · Content · Web',href:'#services'},
+  {label:'Strategic Agency',num:'Narrative · Campaign · Positioning',href:'#services'},
+  {label:'Production Studio',num:'Video · Photo · Design · Motion',href:'#services'},
   {label:'Project Execution',num:'100+ campaigns delivered',href:'#proof'},
   {label:'Productization',num:'Prizzz · Retainers · Systems',href:'#prizzz'}
 ];
 let mobIdx=0;
 const mobLbl=document.getElementById('cmdMobLabel');
 const mobNum=document.getElementById('cmdMobNum');
-document.getElementById('cmdPrev').addEventListener('click',()=>{mobIdx=(mobIdx-1+4)%4;updateMobCmd();});
-document.getElementById('cmdNext').addEventListener('click',()=>{mobIdx=(mobIdx+1)%4;updateMobCmd();});
+document.getElementById('cmdPrev').addEventListener('click',()=>{mobIdx=(mobIdx-1+mobPillars.length)%mobPillars.length;updateMobCmd();});
+document.getElementById('cmdNext').addEventListener('click',()=>{mobIdx=(mobIdx+1)%mobPillars.length;updateMobCmd();});
 function updateMobCmd(){mobLbl.textContent=mobPillars[mobIdx].label;mobNum.textContent=mobPillars[mobIdx].num;}
 mobLbl.addEventListener('click',()=>{window.location.hash=mobPillars[mobIdx].href;});
 </script>

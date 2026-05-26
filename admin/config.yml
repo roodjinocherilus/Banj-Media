@@ -1,0 +1,28 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "assets/blog"
+public_folder: "/assets/blog"
+
+collections:
+  - name: "posts"
+    label: "Articles"
+    folder: "blog/posts"
+    create: true
+    slug: "{{slug}}"
+    format: frontmatter
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime", date_format: "YYYY-MM-DD", time_format: false, format: "YYYY-MM-DD" }
+      - label: "Catégorie"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Article", value: "Article" }
+          - { label: "Annonce", value: "Annonce" }
+          - { label: "Presse", value: "Presse" }
+          - { label: "Mise à jour projet", value: "Mise à jour projet" }
+      - { label: "Extrait", name: "excerpt", widget: "text" }
+      - { label: "Image à la une", name: "featured_image", widget: "image", required: false }
+      - { label: "Corps", name: "body", widget: "markdown" }

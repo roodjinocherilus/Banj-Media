@@ -1,0 +1,14 @@
+[build]
+  command = "node scripts/build-blog.js"
+  publish = "."
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+
+[[redirects]]
+  from = "/blog/:slug"
+  to = "/blog/post.html"
+  status = 200

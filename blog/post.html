@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Article — Banj Media</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+
+  <!-- marked.js for Markdown rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* ══════════════════════════════
+       TOKENS
+    ══════════════════════════════ */
+    :root {
+      --night:      #070923;
+      --night-up:   #0d1030;
+      --red:        #e63c2f;
+      --red-dim:    rgba(230,60,47,.12);
+      --white:      #ffffff;
+      --text:       #f0f0f0;
+      --text-mid:   rgba(240,240,240,.6);
+      --text-dim:   rgba(240,240,240,.35);
+      --divider:    rgba(255,255,255,.08);
+      --nav-h:      68px;
+
+      --cat-article:  #3b82f6;
+      --cat-annonce:  #e63c2f;
+      --cat-presse:   #8b5cf6;
+      --cat-update:   #22c55e;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--night);
+      color: var(--text);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════
+       NAVBAR
+    ══════════════════════════════ */
+    #topbar {
+      position: sticky;
+      top: 0;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      background: rgba(7,9,35,.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--divider);
+      z-index: 900;
+    }
+
+    .tb-wordmark {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: .1em;
+      color: var(--white);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .tb-wordmark em { color: var(--red); font-style: normal; }
+
+    .tb-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-dim);
+      overflow: hidden;
+    }
+    .tb-breadcrumb a {
+      color: var(--text-mid);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color .15s;
+    }
+    .tb-breadcrumb a:hover { color: var(--white); }
+    .tb-breadcrumb .sep { color: var(--text-dim); }
+    .tb-breadcrumb .current {
+      color: var(--text-mid);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 320px;
+    }
+
+    @media (max-width: 640px) {
+      #topbar { padding: 0 20px; }
+      .tb-breadcrumb .current { display: none; }
+    }
+
+    /* ══════════════════════════════
+       LOADING / ERROR STATES
+    ══════════════════════════════ */
+    #state-loading,
+    #state-error {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      gap: 20px;
+      padding: 48px 20px;
+      text-align: center;
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 2px solid var(--divider);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #state-error { display: none; }
+    #state-error h2 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--white);
+    }
+    #state-error p { color: var(--text-mid); }
+    #state-error a {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 14px;
+      color: var(--red);
+      text-decoration: none;
+    }
+    #state-error a:hover { text-decoration: underline; }
+
+    /* ══════════════════════════════
+       ARTICLE
+    ══════════════════════════════ */
+    #article-wrapper { display: none; }
+
+    .article-header {
+      padding: 72px 48px 48px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-mid);
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--white); }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cat-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 100px;
+    }
+    .cat-badge.article   { background: rgba(59,130,246,.15);  color: #93c5fd; }
+    .cat-badge.annonce   { background: var(--red-dim);         color: #fca5a5; }
+    .cat-badge.presse    { background: rgba(139,92,246,.15);   color: #c4b5fd; }
+    .cat-badge.update    { background: rgba(34,197,94,.12);    color: #86efac; }
+    .cat-badge.default   { background: rgba(255,255,255,.08);  color: var(--text-mid); }
+
+    .article-date {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .article-title {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 900;
+      font-size: clamp(36px, 6vw, 72px);
+      line-height: 1.0;
+      letter-spacing: -.01em;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    .article-excerpt {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-mid);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    .featured-img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+      margin-bottom: 56px;
+    }
+
+    /* DIVIDER LINE */
+    .header-line {
+      width: 48px;
+      height: 2px;
+      background: var(--red);
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 640px) {
+      .article-header { padding: 48px 20px 32px; }
+    }
+
+    /* ══════════════════════════════
+       PROSE BODY
+    ══════════════════════════════ */
+    .article-body {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 48px 96px;
+    }
+
+    @media (max-width: 640px) {
+      .article-body { padding: 0 20px 64px; }
+    }
+
+    /* Prose typography */
+    .prose {
+      font-size: 17px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: rgba(240,240,240,.85);
+    }
+    .prose p { margin-bottom: 1.5em; }
+    .prose h2 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
+      color: var(--white);
+      margin: 2.5em 0 .75em;
+      line-height: 1.1;
+    }
+    .prose h3 {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: var(--white);
+      margin: 2em 0 .6em;
+    }
+    .prose h4, .prose h5, .prose h6 {
+      font-weight: 500;
+      font-size: 17px;
+      color: var(--white);
+      margin: 1.5em 0 .5em;
+    }
+    .prose strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+    .prose em { font-style: italic; color: var(--text-mid); }
+    .prose a {
+      color: var(--red);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    .prose a:hover { color: #ff5547; }
+    .prose ul, .prose ol {
+      margin: 1em 0 1.5em 1.5em;
+    }
+    .prose li { margin-bottom: .4em; }
+    .prose blockquote {
+      border-left: 3px solid var(--red);
+      padding-left: 20px;
+      margin: 1.5em 0;
+      color: var(--text-mid);
+      font-style: italic;
+    }
+    .prose code {
+      background: rgba(255,255,255,.07);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 14px;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      color: #93c5fd;
+    }
+    .prose pre {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--divider);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 1.5em 0;
+    }
+    .prose pre code {
+      background: none;
+      padding: 0;
+      font-size: 14px;
+    }
+    .prose img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 1.5em 0;
+    }
+    .prose hr {
+      border: none;
+      border-top: 1px solid var(--divider);
+      margin: 2.5em 0;
+    }
+
+    /* BOTTOM NAV */
+    .article-footer {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 48px 48px;
+      border-top: 1px solid var(--divider);
+      padding-top: 32px;
+    }
+    .article-footer a {
+      font-size: 14px;
+      color: var(--red);
+      text-decoration: none;
+    }
+    .article-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 640px) {
+      .article-footer { padding: 24px 20px 40px; }
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      border-top: 1px solid var(--divider);
+      padding: 40px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .foot-wordmark {
+      font-family: 'Big Shoulders Display', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: .1em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .foot-wordmark em { color: var(--red); font-style: normal; }
+    footer small { font-size: 13px; color: var(--text-dim); }
+
+    @media (max-width: 640px) {
+      footer { padding: 32px 20px; flex-direction: column; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav id="topbar">
+    <a href="/" class="tb-wordmark">BANJ<em>.</em></a>
+    <div class="tb-breadcrumb">
+      <a href="/blog/">Blog</a>
+      <span class="sep">/</span>
+      <span class="current" id="breadcrumb-title">Article</span>
+    </div>
+  </nav>
+
+  <!-- LOADING STATE -->
+  <div id="state-loading">
+    <div class="spinner"></div>
+    <p style="color:var(--text-dim);font-size:14px;">Chargement de l'article…</p>
+  </div>
+
+  <!-- ERROR STATE -->
+  <div id="state-error">
+    <h2>404</h2>
+    <p>Article introuvable.</p>
+    <a href="/blog/">← Retour au Blog</a>
+  </div>
+
+  <!-- ARTICLE -->
+  <div id="article-wrapper">
+    <header class="article-header">
+      <a href="/blog/" class="back-link">← Retour au Blog</a>
+      <div class="article-meta">
+        <span class="cat-badge" id="art-badge"></span>
+        <span class="article-date" id="art-date"></span>
+      </div>
+      <h1 class="article-title" id="art-title"></h1>
+      <p class="article-excerpt" id="art-excerpt"></p>
+      <div class="header-line"></div>
+    </header>
+
+    <div class="article-body">
+      <img id="art-hero-img" class="featured-img" src="" alt="" style="display:none;" />
+      <div class="prose" id="art-body"></div>
+    </div>
+
+    <div class="article-footer">
+      <a href="/blog/">← Retour au Blog</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="/" class="foot-wordmark">BANJ<em>.</em> MEDIA</a>
+    <small>&copy; 2026 Banj Media. Tous droits réservés.</small>
+  </footer>
+
+  <script>
+    (function () {
+      // ── category badge class
+      function badgeClass(cat) {
+        const map = {
+          'Article':            'article',
+          'Annonce':            'annonce',
+          'Presse':             'presse',
+          'Mise à jour projet': 'update',
+        };
+        return map[cat] || 'default';
+      }
+
+      // ── format date
+      function formatDate(iso) {
+        if (!iso) return '';
+        const d = new Date(iso + 'T00:00:00');
+        return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+
+      // ── parse frontmatter from raw markdown string
+      function parseFrontmatter(raw) {
+        const text  = raw.replace(/\r\n/g, '\n');
+        const lines = text.split('\n');
+        if (lines[0].trim() !== '---') return { data: {}, content: raw };
+
+        let endIdx = -1;
+        for (let i = 1; i < lines.length; i++) {
+          if (lines[i].trim() === '---') { endIdx = i; break; }
+        }
+        if (endIdx === -1) return { data: {}, content: raw };
+
+        const fmLines = lines.slice(1, endIdx);
+        const body    = lines.slice(endIdx + 1).join('\n').trimStart();
+        const data    = {};
+
+        for (const line of fmLines) {
+          const ci = line.indexOf(':');
+          if (ci === -1) continue;
+          const key = line.slice(0, ci).trim();
+          let val   = line.slice(ci + 1).trim();
+          if ((val.startsWith('"') && val.endsWith('"')) ||
+              (val.startsWith("'") && val.endsWith("'"))) {
+            val = val.slice(1, -1);
+          }
+          data[key] = val;
+        }
+
+        return { data, content: body };
+      }
+
+      // ── get slug from URL
+      function getSlug() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('slug') || '';
+      }
+
+      function showError() {
+        document.getElementById('state-loading').style.display  = 'none';
+        document.getElementById('state-error').style.display    = 'flex';
+        document.getElementById('article-wrapper').style.display = 'none';
+        document.title = '404 — Banj Media';
+      }
+
+      function showArticle(data, content) {
+        document.getElementById('state-loading').style.display   = 'none';
+        document.getElementById('state-error').style.display     = 'none';
+        document.getElementById('article-wrapper').style.display = 'block';
+
+        // Update title
+        document.title = (data.title || 'Article') + ' — Banj Media';
+        document.getElementById('breadcrumb-title').textContent = data.title || '';
+
+        // Badge
+        const badge = document.getElementById('art-badge');
+        badge.textContent = data.category || '';
+        badge.className   = 'cat-badge ' + badgeClass(data.category);
+
+        document.getElementById('art-date').textContent    = formatDate(data.date);
+        document.getElementById('art-title').textContent   = data.title    || '';
+        document.getElementById('art-excerpt').textContent = data.excerpt  || '';
+
+        // Featured image
+        const heroImg = document.getElementById('art-hero-img');
+        if (data.featured_image) {
+          heroImg.src = data.featured_image;
+          heroImg.alt = data.title || '';
+          heroImg.style.display = 'block';
+        }
+
+        // Render markdown
+        if (typeof marked !== 'undefined') {
+          document.getElementById('art-body').innerHTML = marked.parse(content);
+        } else {
+          // Fallback: plain text
+          const pre = document.createElement('pre');
+          pre.style.whiteSpace = 'pre-wrap';
+          pre.textContent = content;
+          document.getElementById('art-body').appendChild(pre);
+        }
+      }
+
+      // ── main
+      const slug = getSlug();
+      if (!slug) { showError(); return; }
+
+      // Sanitise slug — only allow alphanumeric, hyphens, underscores
+      if (!/^[\w-]+$/.test(slug)) { showError(); return; }
+
+      fetch('/blog/posts/' + encodeURIComponent(slug) + '.md')
+        .then(r => {
+          if (!r.ok) throw new Error('not found');
+          return r.text();
+        })
+        .then(raw => {
+          const { data, content } = parseFrontmatter(raw);
+          showArticle(data, content);
+        })
+        .catch(() => showError());
+    })();
+  </script>
+</body>
+</html>

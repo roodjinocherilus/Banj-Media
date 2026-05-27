@@ -26,3 +26,15 @@ collections:
       - { label: "Extrait", name: "excerpt", widget: "text" }
       - { label: "Image à la une", name: "featured_image", widget: "image", required: false }
       - { label: "Corps", name: "body", widget: "markdown" }
+      - label: "Liens réseaux sociaux"
+        name: "social_links"
+        widget: "object"
+        required: false
+        collapsed: true
+        fields:
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "X (Twitter)", name: "x", widget: "string", required: false }
+          - { label: "TikTok", name: "tiktok", widget: "string", required: false }
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "LinkedIn", name: "linkedin", widget: "string", required: false }
+          - { label: "YouTube", name: "youtube", widget: "string", required: false }

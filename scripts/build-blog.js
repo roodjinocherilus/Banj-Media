@@ -88,6 +88,7 @@ function run() {
       category:       data.category       || '',
       excerpt:        data.excerpt        || '',
       featured_image: data.featured_image || '',
+      social_links:   data.social_links   || {},
     });
   }
 

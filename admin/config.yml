@@ -2,6 +2,11 @@ backend:
   name: git-gateway
   branch: main
 
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
 media_folder: "assets/blog"
 public_folder: "/assets/blog"
 

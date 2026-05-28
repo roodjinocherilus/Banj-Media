@@ -565,8 +565,8 @@
       const slug = getSlug();
       if (!slug) { showError(); return; }
 
-      // Sanitise slug — only allow alphanumeric, hyphens, underscores
-      if (!/^[\w-]+$/.test(slug)) { showError(); return; }
+      // Sanitise slug — allow alphanumeric, accented chars, hyphens, underscores
+      if (!/^[\wÀ-ž-]+$/.test(slug)) { showError(); return; }
 
       fetch('/blog/posts/' + encodeURIComponent(slug) + '.md')
         .then(r => {

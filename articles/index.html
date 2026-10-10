@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Articles — Banj Media</title>
+  <meta name="description" content="Articles, analyses et contenus éditoriaux produits par Banj Media." />
+  <link rel="canonical" href="https://www.banjmedia.com/articles/" />
+  <link rel="icon" href="/assets/favicon/favicon.ico" sizes="any" />
+  <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/favicon/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --white:    #ffffff;
+      --black:    #0d0d0d;
+      --red:      #D92B2B;
+      --red-dim:  rgba(217,43,43,.08);
+      --text:     #0d0d0d;
+      --text-mid: rgba(13,13,13,.52);
+      --text-dim: rgba(13,13,13,.30);
+      --divider:  rgba(13,13,13,.08);
+      --surface:  #f3f4f6;
+      --nav-h:    72px;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { background:var(--white); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; font-weight:300; line-height:1.65; overflow-x:hidden; }
+
+    /* ── NAVBAR ── */
+    #topbar { position:sticky; top:0; height:var(--nav-h); display:flex; align-items:center; justify-content:space-between; padding:0 48px; background:rgba(255,255,255,.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--divider); z-index:900; }
+    .tb-logo { display:flex; align-items:center; text-decoration:none; flex-shrink:0; }
+    .tb-logo img { height:38px; width:auto; display:block; }
+    .tb-nav { display:flex; align-items:center; gap:28px; list-style:none; }
+    .tb-nav a { font-size:13px; font-weight:400; color:var(--text-mid); text-decoration:none; transition:color .15s; }
+    .tb-nav a:hover { color:var(--text); }
+    .tb-nav .active { color:var(--text); font-weight:500; }
+    .tb-cta { font-size:11px; font-weight:600; letter-spacing:.13em; text-transform:uppercase; color:#fff; background:var(--red); padding:9px 20px; border-radius:100px; text-decoration:none; white-space:nowrap; }
+    .tb-cta:hover { opacity:.88; }
+    @media(max-width:768px){ #topbar{padding:0 20px;} .tb-cta{display:none;} .tb-nav{gap:20px;} }
+
+    /* ── HERO ── */
+    .hero { padding:80px 48px 56px; border-bottom:1px solid var(--divider); }
+    .hero-label { display:inline-block; font-size:10px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--red); margin-bottom:16px; }
+    .hero h1 { font-family:'Big Shoulders Display',sans-serif; font-weight:900; font-size:clamp(48px,8vw,88px); line-height:.94; letter-spacing:-.01em; color:var(--black); margin-bottom:18px; }
+    .hero p { font-size:17px; font-weight:300; color:var(--text-mid); max-width:480px; }
+    @media(max-width:640px){ .hero{padding:56px 20px 40px;} }
+
+    /* ── GRID ── */
+    .articles-section { padding:48px 48px 96px; }
+    .articles-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    @media(max-width:1024px){ .articles-grid{grid-template-columns:repeat(2,1fr);} }
+    @media(max-width:640px){ .articles-section{padding:28px 20px 64px;} .articles-grid{grid-template-columns:1fr; gap:16px;} }
+
+    /* ── CARD ── */
+    .article-card { background:var(--white); border:1.5px solid var(--divider); border-radius:14px; display:flex; flex-direction:column; overflow:hidden; text-decoration:none; color:inherit; transition:border-color .2s, box-shadow .2s, transform .2s; }
+    .article-card:hover { border-color:rgba(13,13,13,.18); box-shadow:0 8px 32px rgba(13,13,13,.07); transform:translateY(-2px); }
+    .card-img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+    .card-body { padding:24px; display:flex; flex-direction:column; gap:10px; flex:1; }
+    .card-meta { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+    .cat-badge { display:inline-block; font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:3px 10px; border-radius:100px; }
+    .badge-article { background:#dbeafe; color:#1d4ed8; }
+    .badge-partenariat { background:var(--red-dim); color:var(--red); }
+    .badge-evenement { background:#ede9fe; color:#6d28d9; }
+    .card-date { font-size:12px; color:var(--text-dim); margin-left:auto; }
+    .card-title { font-family:'Big Shoulders Display',sans-serif; font-weight:800; font-size:22px; line-height:1.15; color:var(--black); letter-spacing:.01em; }
+    .card-chapo { font-size:14px; color:var(--text-mid); line-height:1.6; flex:1; }
+    .card-cta { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:500; color:var(--red); margin-top:4px; transition:gap .15s; }
+    .article-card:hover .card-cta { gap:9px; }
+
+    /* ── FOOTER ── */
+    footer { border-top:1px solid var(--divider); padding:40px 48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; background:var(--surface); }
+    .foot-logo { display:flex; align-items:center; text-decoration:none; }
+    .foot-logo img { height:34px; width:auto; }
+    footer small { font-size:13px; color:var(--text-dim); }
+    @media(max-width:640px){ footer{padding:28px 20px; flex-direction:column; gap:10px;} }
+  </style>
+</head>
+<body>
+
+  <nav id="topbar">
+    <a href="/" class="tb-logo"><img src="/assets/banj-media-logo.svg" alt="Banj Media" /></a>
+    <ul class="tb-nav">
+      <li><a href="/">← Accueil</a></li>
+      <li><a href="/articles/" class="active">Articles</a></li>
+    </ul>
+    <a href="/#contact" class="tb-cta">Nous contacter</a>
+  </nav>
+
+  <header class="hero">
+    <span class="hero-label">Éditorial</span>
+    <h1>Articles</h1>
+    <p>Analyses, reportages et contenus produits par Banj Media.</p>
+  </header>
+
+  <section class="articles-section">
+    <div class="articles-grid">
+
+      <!-- Heineken × Burger Fest 2026 -->
+      <a class="article-card" href="/articles/heineken-burger-fest-2026">
+        <img class="card-img"
+             src="/assets/articles/heineken-burger-fest-2026.jpg"
+             alt="Conférence de presse Burger Fest 2026 avec Heineken"
+             width="800" height="450" loading="lazy" />
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="cat-badge badge-article">Article</span>
+            <span class="cat-badge badge-partenariat">Partenariat</span>
+            <span class="card-date">10 oct. 2026</span>
+          </div>
+          <h2 class="card-title">Heineken s'engage dans la culture gastronomique en Haïti</h2>
+          <p class="card-chapo">À quelques jours de la deuxième édition du Burger Fest, Heineken précise une ambition qui dépasse le sponsoring : s'installer durablement dans la vie culturelle haïtienne.</p>
+          <span class="card-cta">Lire →</span>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <a href="/" class="foot-logo"><img src="/assets/banj-media-logo.svg" alt="Banj Media" /></a>
+    <small>&copy; 2026 Banj Media. Tous droits réservés.</small>
+  </footer>
+
+</body>
+</html>

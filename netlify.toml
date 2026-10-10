@@ -12,3 +12,8 @@
   from = "/blog/:slug"
   to = "/blog/post.html"
   status = 200
+
+[[redirects]]
+  from = "/articles/:slug"
+  to = "/articles/:slug.html"
+  status = 200

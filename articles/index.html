@@ -29,7 +29,6 @@
     html { scroll-behavior:smooth; }
     body { background:var(--white); color:var(--text); font-family:'DM Sans',system-ui,sans-serif; font-weight:300; line-height:1.65; overflow-x:hidden; }
 
-    /* ── NAVBAR ── */
     #topbar { position:sticky; top:0; height:var(--nav-h); display:flex; align-items:center; justify-content:space-between; padding:0 48px; background:rgba(255,255,255,.92); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom:1px solid var(--divider); z-index:900; }
     .tb-logo { display:flex; align-items:center; text-decoration:none; flex-shrink:0; }
     .tb-logo img { height:38px; width:auto; display:block; }
@@ -41,20 +40,17 @@
     .tb-cta:hover { opacity:.88; }
     @media(max-width:768px){ #topbar{padding:0 20px;} .tb-cta{display:none;} .tb-nav{gap:20px;} }
 
-    /* ── HERO ── */
     .hero { padding:80px 48px 56px; border-bottom:1px solid var(--divider); }
     .hero-label { display:inline-block; font-size:10px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--red); margin-bottom:16px; }
     .hero h1 { font-family:'Big Shoulders Display',sans-serif; font-weight:900; font-size:clamp(48px,8vw,88px); line-height:.94; letter-spacing:-.01em; color:var(--black); margin-bottom:18px; }
     .hero p { font-size:17px; font-weight:300; color:var(--text-mid); max-width:480px; }
     @media(max-width:640px){ .hero{padding:56px 20px 40px;} }
 
-    /* ── GRID ── */
     .articles-section { padding:48px 48px 96px; }
     .articles-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
     @media(max-width:1024px){ .articles-grid{grid-template-columns:repeat(2,1fr);} }
     @media(max-width:640px){ .articles-section{padding:28px 20px 64px;} .articles-grid{grid-template-columns:1fr; gap:16px;} }
 
-    /* ── CARD ── */
     .article-card { background:var(--white); border:1.5px solid var(--divider); border-radius:14px; display:flex; flex-direction:column; overflow:hidden; text-decoration:none; color:inherit; transition:border-color .2s, box-shadow .2s, transform .2s; }
     .article-card:hover { border-color:rgba(13,13,13,.18); box-shadow:0 8px 32px rgba(13,13,13,.07); transform:translateY(-2px); }
     .card-img { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
@@ -70,7 +66,6 @@
     .card-cta { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:500; color:var(--red); margin-top:4px; transition:gap .15s; }
     .article-card:hover .card-cta { gap:9px; }
 
-    /* ── FOOTER ── */
     footer { border-top:1px solid var(--divider); padding:40px 48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; background:var(--surface); }
     .foot-logo { display:flex; align-items:center; text-decoration:none; }
     .foot-logo img { height:34px; width:auto; }
@@ -97,6 +92,24 @@
 
   <section class="articles-section">
     <div class="articles-grid">
+
+      <!-- Lancement AHPI 2026 -->
+      <a class="article-card" href="/articles/ahpi-lancement">
+        <img class="card-img"
+             src="/assets/articles/ahpi-lancement/toast.jpg"
+             alt="Lancement de l'Académie haïtienne de la propriété intellectuelle"
+             width="800" height="450" loading="lazy" />
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="cat-badge badge-article">Article</span>
+            <span class="cat-badge badge-evenement">Événement</span>
+            <span class="card-date">23 oct. 2026</span>
+          </div>
+          <h2 class="card-title">Haïti se dote d'une académie de la propriété intellectuelle</h2>
+          <p class="card-chapo">Six juristes, un comité né en 2012 et des lois vieilles de plus d'un siècle : l'AHPI a été officiellement lancée le 22 octobre à Port-au-Prince, en présence des ministres du Commerce et de la Culture.</p>
+          <span class="card-cta">Lire →</span>
+        </div>
+      </a>
 
       <!-- Heineken × Burger Fest 2026 -->
       <a class="article-card" href="/articles/heineken-burger-fest-2026">
